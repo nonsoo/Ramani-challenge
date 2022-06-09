@@ -65,27 +65,62 @@ const bubbleSort = (lst, param) => {
   return lst;
 };
 
+const descBubbleSort = (lst, param) => {
+  if (param === "id") {
+    for (let i = 0; i < lst.length; i++) {
+      for (let j = 0; j < lst.length - 1; j++) {
+        if (lst[j].id < lst[j + 1].id) {
+          let temp = lst[j];
+          lst[j] = lst[j + 1];
+          lst[j + 1] = temp;
+        }
+      }
+    }
+  } else if (param === "likes") {
+    for (let i = 0; i < lst.length; i++) {
+      for (let j = 0; j < lst.length - 1; j++) {
+        if (lst[j].likes < lst[j + 1].likes) {
+          let temp = lst[j];
+          lst[j] = lst[j + 1];
+          lst[j + 1] = temp;
+        }
+      }
+    }
+  } else if (param === "reads") {
+    for (let i = 0; i < lst.length; i++) {
+      for (let j = 0; j < lst.length - 1; j++) {
+        if (lst[j].reads < lst[j + 1].reads) {
+          let temp = lst[j];
+          lst[j] = lst[j + 1];
+          lst[j + 1] = temp;
+        }
+      }
+    }
+  } else if (param === "popularity") {
+    for (let i = 0; i < lst.length; i++) {
+      for (let j = 0; j < lst.length - 1; j++) {
+        if (lst[j].popularity < lst[j + 1].popularity) {
+          let temp = lst[j];
+          lst[j] = lst[j + 1];
+          lst[j + 1] = temp;
+        }
+      }
+    }
+  }
+
+  return lst;
+};
+
 app.get("/api/ping", (req, res) => {
   res.status(200).json({ success: true });
 });
 
 app.get("/api/posts", (req, res) => {
   const queryParam = req.query;
-
-  const sortByLst = ["id", "reads", "likes", "popularity"];
-  const directionLst = ["asc", "desc"];
   let respLst = [];
 
   if (!queryParam.tag) {
     return res.status(400).json({ error: "Tags parameter is required" });
-  }
-
-  // if (!(queryParam.sortBy in sortByLst)) {
-  //   return res.status(400).json({ error: "sortBy parameter is invalid" });
-  // }
-
-  if (queryParam.direction in directionLst) {
-    return res.status(400).json({ error: "direction parameter is invalid" });
   }
 
   const lstTags = splitFunc(queryParam.tag);
@@ -106,11 +141,23 @@ app.get("/api/posts", (req, res) => {
       let finalLst = bubbleSort(hashedLst(respLst), "id");
 
       if (queryParam.sortBy && queryParam.sortBy === "likes") {
-        finalLst = bubbleSort(hashedLst(respLst), "likes");
+        if (queryParam.direction && queryParam.direction === "desc") {
+          finalLst = descBubbleSort(hashedLst(respLst), "likes");
+        } else {
+          finalLst = bubbleSort(hashedLst(respLst), "likes");
+        }
       } else if (queryParam.sortBy && queryParam.sortBy === "reads") {
-        finalLst = bubbleSort(hashedLst(respLst), "reads");
+        if (queryParam.direction && queryParam.direction === "desc") {
+          finalLst = descBubbleSort(hashedLst(respLst), "reads");
+        } else {
+          finalLst = bubbleSort(hashedLst(respLst), "reads");
+        }
       } else if (queryParam.sortBy && queryParam.sortBy === "popularity") {
-        finalLst = bubbleSort(hashedLst(respLst), "popularity");
+        if (queryParam.direction && queryParam.direction === "desc") {
+          finalLst = descBubbleSort(hashedLst(respLst), "popularity");
+        } else {
+          finalLst = bubbleSort(hashedLst(respLst), "popularity");
+        }
       }
 
       res.status(200).json(finalLst);
