@@ -7,6 +7,18 @@ const splitFunc = (param) => {
   return param.split(",");
 };
 
+const hashedLst = (lst) => {
+  let hashed = [];
+  let alreadySeen = [];
+  lst.forEach((item) => {
+    if (!(item.id in alreadySeen)) {
+      hashed.push(item);
+      alreadySeen.push(item.id);
+    }
+  });
+  return hashed;
+};
+
 app.get("/api/ping", (req, res) => {
   res.status(200).json({ success: true });
 });
@@ -34,7 +46,9 @@ app.get("/api/posts", (req, res) => {
         respLst = [...respLst, ...post.data.posts];
       });
 
-      res.status(200).json(respLst);
+      const finalLst = hashedLst(respLst);
+
+      res.status(200).json(finalLst);
     })
     .catch((err) => {
       console.log(err);
