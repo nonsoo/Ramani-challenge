@@ -1,5 +1,5 @@
-const express = require("express");
-const axios = require("axios");
+import express from "express";
+import axios from "axios";
 
 const app = express();
 
@@ -167,4 +167,4 @@ app.get("/api/posts", (req, res) => {
     });
 });
 
-app.listen(8000, () => console.log("Listening on port 8000"));
+export default app;
