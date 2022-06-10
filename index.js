@@ -1,7 +1,20 @@
 import express from "express";
 import axios from "axios";
+import rateLimit from "express-rate-limit";
+import apicache from "apicache";
 
 const app = express();
+
+// rate limiter settings
+const limiter = rateLimit({
+  windowMs: 300000000, //5 mins
+  max: 50,
+});
+
+//init cachhe
+let cache = apicache.middleware;
+
+app.use(limiter);
 
 const splitFunc = (param) => {
   return param.split(",");
@@ -115,7 +128,7 @@ app.get("/api/ping", (req, res) => {
   res.status(200).json({ success: true });
 });
 
-app.get("/api/posts", (req, res) => {
+app.get("/api/posts", cache("2 minutes"), (req, res) => {
   const queryParam = req.query;
   let respLst = [];
 
