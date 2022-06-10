@@ -1,15 +1,15 @@
 {
   "name": "ramani-challenge",
   "version": "1.0.0",
-  "description": "Api for Blog post",
+  "description": "Completed Api for Blog post",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "test": "jest",
-    "start": "nodemon server.js"
+    "server": "nodemon server.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Nonso Otoh",
   "license": "ISC",
   "dependencies": {
     "apicache": "^1.6.3",

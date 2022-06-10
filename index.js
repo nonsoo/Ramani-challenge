@@ -130,12 +130,12 @@ app.get("/api/ping", (req, res) => {
 
 app.get("/api/posts", cache("2 minutes"), (req, res) => {
   const queryParam = req.query;
-  let respLst = [];
 
   if (!queryParam.tag) {
     return res.status(400).json({ error: "Tags parameter is required" });
   }
 
+  let respLst = [];
   const lstTags = splitFunc(queryParam.tag);
 
   axios
